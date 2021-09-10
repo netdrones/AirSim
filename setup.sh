@@ -1,12 +1,12 @@
-#! /bin/bash
-set -x
-set -e
+#!/usr/bin/env bash
+# only for debugging
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 pushd "$SCRIPT_DIR" >/dev/null
 
 downloadHighPolySuv=true
 MIN_CMAKE_VERSION=3.10.0
+DEBUG="${DEBUG:-false}"
 function version_less_than_equal_to() { test "$(printf '%s\n' "$@" | sort -V | head -n 1)" = "$1"; }
 
 # brew gives error if package is already installed
@@ -18,18 +18,28 @@ do
 key="$1"
 
 case $key in
+    --debug)
+        DEBUG=true
+        ;;
     --no-full-poly-car)
-    downloadHighPolySuv=false
-    shift # past value
-    ;;
+        downloadHighPolySuv=false
+        shift # past value
+        ;;
 esac
+
 done
+
+if $DEBUG; then
+    set -x
+    set -e
+fi 
 
 # llvm tools
 if [ "$(uname)" == "Darwin" ]; then # osx
     brew update
     # Update below line for newer versions
-    brew install llvm@8
+    #brew install llvm@8
+    brew install llvm
 else #linux
     sudo apt-get update
     sudo apt-get -y install --no-install-recommends \
