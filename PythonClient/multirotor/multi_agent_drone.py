@@ -1,9 +1,9 @@
+import setup_path 
 import airsim
 import cv2
 import numpy as np
 import os
 import pprint
-import setup_path 
 import tempfile
 
 # Use below in settings.json with Blocks environment
